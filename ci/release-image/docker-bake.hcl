@@ -12,14 +12,14 @@ group "default" {
 
 target "code-server-amd64" {
     dockerfile = "ci/release-image/Dockerfile"
-    tags = ["docker.io/codercom/code-server-amd64:${VERSION}"]
+    tags = ["docker.io/cubetiq/code-server-amd64:${VERSION}"]
     platforms = ["linux/amd64"]
     output = ["type=tar,dest=./release-images/code-server-amd64-${VERSION}.tar"]
 }
 
 target "code-server-arm64" {
     dockerfile = "ci/release-image/Dockerfile"
-    tags = ["docker.io/codercom/code-server-arm64:${VERSION}"]
+    tags = ["docker.io/cubetiq/code-server-arm64:${VERSION}"]
     platforms = ["linux/arm64"]
     output = ["type=tar,dest=./release-images/code-server-arm64-${VERSION}.tar"]
 }
