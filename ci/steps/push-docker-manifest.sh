@@ -23,14 +23,12 @@ main() {
 
   export DOCKER_CLI_EXPERIMENTAL=enabled
 
-  docker manifest create 
-    "cubetiq/code-server:$VERSION" \
+  docker manifest create "cubetiq/code-server:$VERSION" \
     "cubetiq/code-server-amd64:$VERSION" \
     "cubetiq/code-server-arm64:$VERSION"
   docker manifest push --purge "cubetiq/code-server:$VERSION"
 
-  docker manifest create
-    "cubetiq/code-server:latest" \
+  docker manifest create "cubetiq/code-server:latest" \
     "cubetiq/code-server-amd64:$VERSION" \
     "cubetiq/code-server-arm64:$VERSION"
   docker manifest push --purge "cubetiq/code-server:latest"
