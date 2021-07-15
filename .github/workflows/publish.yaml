@@ -27,9 +27,12 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Run ./ci/steps/push-docker-manifest.sh
+      - 
+        name: Run ./ci/steps/push-docker-manifest.sh
         run: ./ci/steps/push-docker-manifest.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
