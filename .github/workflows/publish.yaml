@@ -9,6 +9,19 @@ on:
     types: [published]
 
 jobs:
+  # NOTE: this job requires curl, jq and yarn
+  # All of them are included in ubuntu-latest.
+  # npm:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Run ./ci/steps/publish-npm.sh
+  #       run: ./ci/steps/publish-npm.sh
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
   # NOTE: this job requires curl, jq and docker
   # All of them are included in ubuntu-latest.
   docker:
