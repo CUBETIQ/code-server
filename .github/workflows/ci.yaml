@@ -240,100 +240,100 @@ jobs:
   # so we just build with "native"/x86_64 node, then download arm64 node
   # and then put it in our release. We can't smoke test the arm64 build this way,
   # but this means we don't need to maintain a self-hosted runner!
-  package-linux-arm64:
-    name: Linux ARM64 cross-compile build
-    needs: build
-    runs-on: ubuntu-16.04
-    timeout-minutes: 15
-    env:
-      AR: aarch64-linux-gnu-ar
-      CC: aarch64-linux-gnu-gcc
-      CXX: aarch64-linux-gnu-g++
-      LINK: aarch64-linux-gnu-g++
-      NPM_CONFIG_ARCH: arm64
+  # package-linux-arm64:
+  #   name: Linux ARM64 cross-compile build
+  #   needs: build
+  #   runs-on: ubuntu-16.04
+  #   timeout-minutes: 15
+  #   env:
+  #     AR: aarch64-linux-gnu-ar
+  #     CC: aarch64-linux-gnu-gcc
+  #     CXX: aarch64-linux-gnu-g++
+  #     LINK: aarch64-linux-gnu-g++
+  #     NPM_CONFIG_ARCH: arm64
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Install Node.js v14
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
+  #     - name: Install Node.js v14
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: "14"
 
-      - name: Install nfpm
-        run: |
-          curl -sfL https://install.goreleaser.com/github.com/goreleaser/nfpm.sh | sh -s -- -b ~/.local/bin v2.3.1
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+  #     - name: Install nfpm
+  #       run: |
+  #         curl -sfL https://install.goreleaser.com/github.com/goreleaser/nfpm.sh | sh -s -- -b ~/.local/bin v2.3.1
+  #         echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Install cross-compiler
-        run: sudo apt install g++-aarch64-linux-gnu
+  #     - name: Install cross-compiler
+  #       run: sudo apt install g++-aarch64-linux-gnu
 
-      - name: Download npm package
-        uses: actions/download-artifact@v2
-        with:
-          name: npm-package
+  #     - name: Download npm package
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: npm-package
 
-      - name: Decompress npm package
-        run: tar -xzf package.tar.gz
+  #     - name: Decompress npm package
+  #       run: tar -xzf package.tar.gz
 
-      - name: Build standalone release
-        run: yarn release:standalone
+  #     - name: Build standalone release
+  #       run: yarn release:standalone
 
-      - name: Replace node with arm64 equivalent
-        run: |
-          wget https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-arm64.tar.xz
-          tar -xf node-v14.17.0-linux-arm64.tar.xz node-v14.17.0-linux-arm64/bin/node --strip-components=2
-          mv ./node ./release-standalone/lib/node
+  #     - name: Replace node with arm64 equivalent
+  #       run: |
+  #         wget https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-arm64.tar.xz
+  #         tar -xf node-v14.17.0-linux-arm64.tar.xz node-v14.17.0-linux-arm64/bin/node --strip-components=2
+  #         mv ./node ./release-standalone/lib/node
 
-      - name: Build packages with nfpm
-        run: yarn package arm64
+  #     - name: Build packages with nfpm
+  #       run: yarn package arm64
 
-      - name: Upload release artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-packages
-          path: ./release-packages
+  #     - name: Upload release artifacts
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: release-packages
+  #         path: ./release-packages
 
-  package-macos-amd64:
-    name: x86-64 macOS build
-    needs: build
-    runs-on: macos-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v2
+  # package-macos-amd64:
+  #   name: x86-64 macOS build
+  #   needs: build
+  #   runs-on: macos-latest
+  #   timeout-minutes: 15
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Install Node.js v14
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
+  #     - name: Install Node.js v14
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: "14"
 
-      - name: Install nfpm
-        run: |
-          curl -sfL https://install.goreleaser.com/github.com/goreleaser/nfpm.sh | sh -s -- -b ~/.local/bin v2.3.1
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+  #     - name: Install nfpm
+  #       run: |
+  #         curl -sfL https://install.goreleaser.com/github.com/goreleaser/nfpm.sh | sh -s -- -b ~/.local/bin v2.3.1
+  #         echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Download npm package
-        uses: actions/download-artifact@v2
-        with:
-          name: npm-package
+  #     - name: Download npm package
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: npm-package
 
-      - name: Decompress npm package
-        run: tar -xzf package.tar.gz
+  #     - name: Decompress npm package
+  #       run: tar -xzf package.tar.gz
 
-      - name: Build standalone release
-        run: yarn release:standalone
+  #     - name: Build standalone release
+  #       run: yarn release:standalone
 
-      - name: Sanity test standalone release
-        run: yarn test:standalone-release
+  #     - name: Sanity test standalone release
+  #       run: yarn test:standalone-release
 
-      - name: Build packages with nfpm
-        run: yarn package
+  #     - name: Build packages with nfpm
+  #       run: yarn package
 
-      - name: Upload release artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-packages
-          path: ./release-packages
+  #     - name: Upload release artifacts
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: release-packages
+  #         path: ./release-packages
 
   test-e2e:
     name: End-to-end tests
@@ -403,32 +403,32 @@ jobs:
         run: rm -rf ./release-packages ./test/test-results
 
   # Builds both amd64 and arm64 images
-  docker-images:
-    runs-on: ubuntu-latest
-    needs: [package-linux-amd64, package-linux-arm64]
-    steps:
-      - uses: actions/checkout@v2
+  # docker-images:
+  #   runs-on: ubuntu-latest
+  #   needs: [package-linux-amd64, package-linux-arm64]
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Download release package
-        uses: actions/download-artifact@v2
-        with:
-          name: release-packages
-          path: ./release-packages
+  #     - name: Download release package
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: release-packages
+  #         path: ./release-packages
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v1
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
 
-      - name: Run ./ci/steps/build-docker-image.sh
-        run: ./ci/steps/build-docker-image.sh
+  #     - name: Run ./ci/steps/build-docker-image.sh
+  #       run: ./ci/steps/build-docker-image.sh
 
-      - name: Upload release images
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-images
-          path: ./release-images
+  #     - name: Upload release images
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: release-images
+  #         path: ./release-images
 
   # We have to use two trivy jobs
   # because GitHub only allows
